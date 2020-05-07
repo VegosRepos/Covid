@@ -18,11 +18,7 @@ Widget spinKit(BuildContext context) {
 }
 
 Widget error(BuildContext context) {
-  return Center(
-      child: Text(
-    'Oups! An error occured',
-    style: GoogleFonts.andika(fontSize: 15, color: Colors.deepOrange[800]),
-  ));
+  return Container();
 }
 
 Widget cardView(BuildContext context, Country country, int index) {

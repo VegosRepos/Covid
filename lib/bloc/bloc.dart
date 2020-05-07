@@ -21,7 +21,7 @@ class MainBloc extends Bloc<Events, MainState> {
           var result = await repository.getCountriesInfo();
           yield SuccessResponse(result);
         } catch (_) {
-          yield Error();
+          print('An error occured');
         }
     }
   }

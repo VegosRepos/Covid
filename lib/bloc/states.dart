@@ -12,4 +12,4 @@ class SuccessResponse extends MainState {
   SuccessResponse(this.result);
 }
 
-class Error extends MainState {}
+//class Error extends MainState {}

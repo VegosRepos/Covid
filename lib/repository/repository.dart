@@ -5,9 +5,13 @@ import 'package:covid/data/remote/services.dart';
 import 'package:covid/presentation/models/Model.dart';
 
 class Repository {
+  //TODO('Parse json')
+
+  Services services = Services();
+
   Future<Model> getCountriesInfo() async {
     final response =
-        await Services().getSummaryInfo("https://api.covid19api.com/summary");
+        await services.getSummaryInfo("https://api.covid19api.com/summary");
     List<Country> countries = parsedCountries(response);
     Global global = parsedGlobal(response);
     return Model(countries, global);
