@@ -1,4 +1,5 @@
 import 'package:covid/data/models/Response.dart';
+import 'package:covid/presentation/animations/page_animation.dart';
 import 'package:covid/presentation/pages/description.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +27,7 @@ Widget cardView(BuildContext context, Country country, int index) {
     color: Colors.deepOrange[300],
     child: ListTile(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return Description(country: country);
-        }));
+        Navigator.of(context).push(routeToDescription(country));
       },
       title: Text(
         country.country.toString(),
