@@ -34,16 +34,17 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-//TODO inherited widget
-
 class _HomePageState extends State<HomePage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = BlocProvider.of<MainBloc>(context);
+    bloc.add(Events.getSummaryInfo);
+  }
+
   @override
   Widget build(BuildContext context) {
     //TODO dependency injection
-    //TODO('Change')
-    final bloc = BlocProvider.of<MainBloc>(context);
-    bloc.add(Events.getSummaryInfo);
-
     return LiquidPullToRefresh(
       child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
       onRefresh: () async {
-        return bloc.add(Events.getSummaryInfo);
+        return didChangeDependencies();
       },
     );
   }
