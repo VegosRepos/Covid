@@ -1,8 +1,8 @@
-import 'package:covid/data/models/Response.dart';
+import 'package:covid/models/country_model.dart';
 import 'package:covid/presentation/pages/description.dart';
 import 'package:flutter/widgets.dart';
 
-Route routeToDescription(Country country) {
+Route routeToDescription(Country_model country) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
         Description(country: country),

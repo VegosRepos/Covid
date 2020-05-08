@@ -1,6 +1,6 @@
-import 'package:covid/data/models/Response.dart';
+import 'package:covid/models/country_model.dart';
+import 'package:covid/models/global_model.dart';
 import 'package:covid/presentation/animations/page_animation.dart';
-import 'package:covid/presentation/pages/description.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -22,7 +22,7 @@ Widget error(BuildContext context) {
   return Container();
 }
 
-Widget cardView(BuildContext context, Country country, int index) {
+Widget cardView(BuildContext context, Country_model country, int index) {
   return Card(
     color: Colors.deepOrange[300],
     child: ListTile(
@@ -30,7 +30,7 @@ Widget cardView(BuildContext context, Country country, int index) {
         Navigator.of(context).push(routeToDescription(country));
       },
       title: Text(
-        country.country.toString(),
+        country.Country.toString(),
         style: GoogleFonts.aBeeZee(color: Colors.white),
       ),
       leading: Text(index.toString(),
@@ -39,7 +39,7 @@ Widget cardView(BuildContext context, Country country, int index) {
   );
 }
 
-Widget sliverAppBar(BuildContext context, Global global) {
+Widget sliverAppBar(BuildContext context, Global_model global) {
   return SliverAppBar(
     expandedHeight: 300,
     backgroundColor: Colors.green[200],
@@ -52,7 +52,7 @@ Widget sliverAppBar(BuildContext context, Global global) {
             children: <Widget>[
               Text('Confirmed',
                   style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-              Text(global.totalConfirmed.toString(),
+              Text(global.TotalConfirmed.toString(),
                   style: GoogleFonts.aBeeZee(
                       fontSize: 25, color: Colors.yellow[300]))
             ],
@@ -61,7 +61,7 @@ Widget sliverAppBar(BuildContext context, Global global) {
             children: <Widget>[
               Text('Deaths',
                   style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-              Text(global.totalDeaths.toString(),
+              Text(global.TotalDeaths.toString(),
                   style:
                       GoogleFonts.aBeeZee(fontSize: 25, color: Colors.red[400]))
             ],
@@ -70,7 +70,7 @@ Widget sliverAppBar(BuildContext context, Global global) {
             children: <Widget>[
               Text('Recovered',
                   style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-              Text(global.totalRecovered.toString(),
+              Text(global.TotalRecovered.toString(),
                   style: GoogleFonts.aBeeZee(
                       fontSize: 25, color: Colors.green[800]))
             ],
@@ -81,7 +81,7 @@ Widget sliverAppBar(BuildContext context, Global global) {
   );
 }
 
-Widget sliverList(BuildContext context, List<Country> countries) {
+Widget sliverList(BuildContext context, List<Country_model> countries) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
       return cardView(context, countries[index], index + 1);

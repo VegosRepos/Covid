@@ -1,11 +1,11 @@
-import 'package:covid/data/models/Response.dart';
+import 'package:covid/models/country_model.dart';
 import 'package:covid/presentation/widgets/description_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Description extends StatefulWidget {
-  final Country country;
+  final Country_model country;
 
   const Description({Key key, this.country}) : super(key: key);
 
@@ -14,7 +14,7 @@ class Description extends StatefulWidget {
 }
 
 class _DescriptionState extends State<Description> {
-  final Country country;
+  final Country_model country;
 
   _DescriptionState(this.country);
 
@@ -30,7 +30,7 @@ class _DescriptionState extends State<Description> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              country.country,
+              country.Country,
               style: GoogleFonts.aBeeZee(),
             ),
             backgroundColor: Colors.deepOrange[300],

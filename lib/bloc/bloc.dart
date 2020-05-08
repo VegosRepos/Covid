@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:covid/bloc/events.dart';
-import 'package:covid/bloc/states.dart';
 import 'package:covid/repository/repository.dart';
 
-import 'events.dart';
+import 'states.dart';
 
 class MainBloc extends Bloc<Events, MainState> {
   final Repository repository;

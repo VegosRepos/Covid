@@ -1,8 +1,7 @@
 import 'package:covid/bloc/bloc.dart';
 import 'package:covid/bloc/events.dart';
 import 'package:covid/bloc/states.dart';
-import 'package:covid/data/models/Response.dart';
-import 'package:covid/presentation/models/Model.dart';
+import 'package:covid/models/index.dart';
 import 'package:covid/presentation/widgets/main_widgets.dart';
 import 'package:covid/repository/repository.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
               height: MediaQuery.of(context).size.height - 24,
               child: CustomScrollView(
                 slivers: <Widget>[
-                  sliverAppBar(context, state.result.global),
+                  sliverAppBar(context, state.result.Global),
                   sliverList(context, sortCountriesByConfirmed(state.result))
                 ],
               ),
@@ -72,10 +71,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Country> sortCountriesByConfirmed(Model result) {
-    result.countries
-        .sort((a, b) => a.totalConfirmed.compareTo(b.totalConfirmed));
-    final sortedList = result.countries.reversed.toList();
+  List<Country_model> sortCountriesByConfirmed(Main_model mainModel) {
+    mainModel.Countries.sort(
+        (a, b) => a.TotalConfirmed.compareTo(b.TotalConfirmed));
+    final sortedList = mainModel.Countries.reversed.toList();
     return sortedList;
   }
 }

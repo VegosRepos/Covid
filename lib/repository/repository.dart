@@ -1,33 +1,16 @@
 import 'dart:convert';
 
-import 'package:covid/data/models/Response.dart';
 import 'package:covid/data/remote/services.dart';
-import 'package:covid/presentation/models/Model.dart';
+import 'package:covid/models/index.dart';
 
 class Repository {
-  //TODO('Parse json')
-
   Services services = Services();
 
-  Future<Model> getCountriesInfo() async {
+  Future<Main_model> getCountriesInfo() async {
     final response =
         await services.getSummaryInfo("https://api.covid19api.com/summary");
-    List<Country> countries = parsedCountries(response);
-    Global global = parsedGlobal(response);
-    return Model(countries, global);
-  }
-
-  List<Country> parsedCountries(final response) {
-    final jsonDecoded = json.decode(response.body)['Countries'] as List;
-    List<Country> countries = jsonDecoded
-        .map((countryJson) => Country.fromJson(countryJson))
-        .toList();
-    return countries;
-  }
-
-  Global parsedGlobal(final response) {
-    final jsonDecoded = json.decode(response.body)['Global'];
-    Global global = Global.fromJson(jsonDecoded);
-    return global;
+    final jsonDecoded = json.decode(response.body);
+    Main_model main_model = Main_model.fromJson(jsonDecoded);
+    return main_model;
   }
 }

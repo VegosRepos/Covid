@@ -1,0 +1,4 @@
+{
+  "Global": "$global_model",
+  "Countries": "$[]country_model"
+}

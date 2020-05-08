@@ -1,4 +1,4 @@
-import 'package:covid/data/models/Response.dart';
+import 'package:covid/models/country_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,15 +21,15 @@ Widget info(String description, String info) {
   );
 }
 
-Widget countryDescription(BuildContext context, Country country) {
+Widget countryDescription(BuildContext context, Country_model country) {
   return Column(
     children: <Widget>[
-      info('New confirmed:', country.newConfirmed.toString()),
-      info('Total confirmed:', country.totalConfirmed.toString()),
-      info('New deaths:', country.newDeaths.toString()),
-      info('Total deaths:', country.totalDeaths.toString()),
-      info('New recovered:', country.newRecovered.toString()),
-      info('Total recovered:', country.totalRecovered.toString()),
+      info('New confirmed:', country.NewConfirmed.toString()),
+      info('Total confirmed:', country.TotalConfirmed.toString()),
+      info('New deaths:', country.NewDeaths.toString()),
+      info('Total deaths:', country.TotalDeaths.toString()),
+      info('New recovered:', country.NewRecovered.toString()),
+      info('Total recovered:', country.TotalRecovered.toString()),
     ],
   );
 }
