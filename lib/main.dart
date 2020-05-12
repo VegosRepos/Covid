@@ -1,14 +1,17 @@
 import 'package:covid/bloc/bloc.dart';
 import 'package:covid/bloc/events.dart';
 import 'package:covid/bloc/states.dart';
-import 'package:covid/models/index.dart';
+import 'package:covid/locator.dart';
+import 'package:covid/presentation/utils/utils.dart';
 import 'package:covid/presentation/widgets/main_widgets.dart';
-import 'package:covid/repository/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
-void main() => runApp(Application());
+void main() {
+  setupLocator();
+  runApp(Application());
+}
 
 class Application extends StatelessWidget {
   @override
@@ -20,7 +23,7 @@ class Application extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.green[200],
           body: BlocProvider(
-            create: (context) => MainBloc(Repository()),
+            create: (context) => locator<MainBloc>(),
             child: HomePage(),
           ),
         ),
@@ -44,7 +47,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO dependency injection
     return LiquidPullToRefresh(
       child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
@@ -70,12 +72,5 @@ class _HomePageState extends State<HomePage> {
         return didChangeDependencies();
       },
     );
-  }
-
-  List<Country_model> sortCountriesByConfirmed(Main_model mainModel) {
-    mainModel.Countries.sort(
-        (a, b) => a.TotalConfirmed.compareTo(b.TotalConfirmed));
-    final sortedList = mainModel.Countries.reversed.toList();
-    return sortedList;
   }
 }
