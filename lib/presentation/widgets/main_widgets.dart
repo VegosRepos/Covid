@@ -1,19 +1,26 @@
 import 'package:covid/models/country_model.dart';
 import 'package:covid/models/global_model.dart';
+import 'package:covid/models/index.dart';
 import 'package:covid/presentation/animations/page_animation.dart';
+import 'package:covid/presentation/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget spinKit(BuildContext context) {
+Widget spinKit(BuildContext context, String message) {
   return Center(
-    child: CircleAvatar(
-      backgroundImage: AssetImage('images/corona.png'),
-      radius: 40,
-      backgroundColor: Colors.transparent,
-      child:
-          SpinKitRing(color: Colors.deepOrange[300], size: 100, lineWidth: 3),
+    child: Column(
+      children: <Widget>[
+        CircleAvatar(
+          backgroundImage: AssetImage('images/corona.png'),
+          radius: 40,
+          backgroundColor: Colors.transparent,
+          child: SpinKitRing(
+              color: Colors.deepOrange[300], size: 100, lineWidth: 3),
+        ),
+        Text(message),
+      ],
     ),
   );
 }
@@ -87,4 +94,20 @@ Widget sliverList(BuildContext context, List<Country_model> countries) {
       return cardView(context, countries[index], index + 1);
     }, childCount: countries.length),
   );
+}
+
+Widget mainWidget(BuildContext context, Main_model model) {
+  return SizedBox(
+    height: MediaQuery.of(context).size.height - 24,
+    child: CustomScrollView(
+      slivers: <Widget>[
+        sliverAppBar(context, model.Global),
+        sliverList(context, sortCountriesByConfirmed(model))
+      ],
+    ),
+  );
+}
+
+Widget errorWidget(BuildContext context, String message) {
+  return Text(message);
 }

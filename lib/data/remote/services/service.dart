@@ -9,7 +9,7 @@ class Service {
 
   final String _baseUrl = "https://api.covid19api.com/";
 
-  Future<dynamic> getSummaryInfo(String url) async {
+  Future<dynamic> getCovidInfo(String url) async {
     var responseJson;
     try {
       Response response = await get(_baseUrl + url);

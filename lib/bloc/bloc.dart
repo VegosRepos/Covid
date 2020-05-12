@@ -1,25 +1,36 @@
-import 'package:bloc/bloc.dart';
-import 'package:covid/bloc/events.dart';
-import 'package:covid/locator.dart';
+import 'dart:async';
+
+import 'package:covid/data/remote/models/api_response.dart';
+import 'package:covid/models/main_model.dart';
 import 'package:covid/repository/repository.dart';
 
-import 'states.dart';
+class MainBloc {
+  Repository _repository;
 
-class MainBloc extends Bloc<Events, MainState> {
+  StreamController _streamController;
 
-  @override
-  MainState get initialState => Loading();
+  StreamSink<ApiResponse<Main_model>> get sink => _streamController.sink;
 
-  @override
-  Stream<MainState> mapEventToState(Events event) async* {
-    switch (event) {
-      case Events.getSummaryInfo:
-        try {
-          var result = await locator<Repository>().getCountriesInfo();
-          yield SuccessResponse(result);
-        } catch (_) {
-          print('An error occured');
-        }
+  Stream<ApiResponse<Main_model>> get stream => _streamController.stream;
+
+  MainBloc() {
+    _streamController = StreamController<ApiResponse<Main_model>>();
+    _repository = Repository();
+    fetchData();
+  }
+
+  fetchData() async {
+    sink.add(ApiResponse.loading('Fetching covid information'));
+    try {
+      Main_model model = await _repository.getCovidInfo();
+      sink.add(ApiResponse.completed(model));
+    } catch (e) {
+      sink.add(ApiResponse.error(e.toString()));
+      print(e);
     }
+  }
+
+  dispose() {
+    _streamController?.close();
   }
 }

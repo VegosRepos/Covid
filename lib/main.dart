@@ -1,12 +1,10 @@
 import 'package:covid/bloc/bloc.dart';
-import 'package:covid/bloc/events.dart';
-import 'package:covid/bloc/states.dart';
 import 'package:covid/locator.dart';
-import 'package:covid/presentation/utils/utils.dart';
 import 'package:covid/presentation/widgets/main_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
+import 'data/remote/models/api_response.dart';
+import 'models/main_model.dart';
 
 void main() {
   setupLocator();
@@ -16,19 +14,7 @@ void main() {
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.lightGreen),
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.green[200],
-          body: BlocProvider(
-            create: (context) => locator<MainBloc>(),
-            child: HomePage(),
-          ),
-        ),
-      ),
-    );
+    return MaterialApp(home: HomePage());
   }
 }
 
@@ -38,39 +24,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  MainBloc _bloc;
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final bloc = BlocProvider.of<MainBloc>(context);
-    bloc.add(Events.getSummaryInfo);
+  void initState() {
+    _bloc = MainBloc();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LiquidPullToRefresh(
-      child: BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) {
-          //TODO Use 2 states
-          if (state is Loading) {
-            return spinKit(context);
-          } else if (state is SuccessResponse) {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height - 24,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  sliverAppBar(context, state.result.Global),
-                  sliverList(context, sortCountriesByConfirmed(state.result))
-                ],
-              ),
-            );
-          } else {
-            return error(context);
-          }
-        },
+    return Scaffold(
+      body: Center(
+        child: RefreshIndicator(
+          onRefresh: () => _bloc.fetchData(),
+          child: StreamBuilder<ApiResponse<Main_model>>(
+            stream: _bloc.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                switch (snapshot.data.status) {
+                  case Status.LOADING:
+                    return spinKit(context, snapshot.data.message);
+                    break;
+                  case Status.COMPLETED:
+                    return mainWidget(context, snapshot.data.data);
+                    break;
+                  case Status.ERROR:
+                    return errorWidget(context, snapshot.data.message);
+                    break;
+                }
+              }
+              return Container();
+            },
+          ),
+        ),
       ),
-      onRefresh: () async {
-        return didChangeDependencies();
-      },
     );
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }

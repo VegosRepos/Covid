@@ -1,4 +1,3 @@
-import 'package:covid/presentation/pages/description.dart';
 import 'package:covid/repository/repository.dart';
 import 'package:get_it/get_it.dart';
 
