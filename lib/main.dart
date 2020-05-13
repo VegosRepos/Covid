@@ -14,7 +14,7 @@ void main() {
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomePage());
+    return MaterialApp(home: SafeArea(child: HomePage()));
   }
 }
 
@@ -35,28 +35,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: RefreshIndicator(
-          onRefresh: () => _bloc.fetchData(),
-          child: StreamBuilder<ApiResponse<Main_model>>(
-            stream: _bloc.stream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                switch (snapshot.data.status) {
-                  case Status.LOADING:
-                    return spinKit(context, snapshot.data.message);
-                    break;
-                  case Status.COMPLETED:
-                    return mainWidget(context, snapshot.data.data);
-                    break;
-                  case Status.ERROR:
-                    return errorWidget(context, snapshot.data.message);
-                    break;
-                }
+      backgroundColor: Colors.green[200],
+      body: RefreshIndicator(
+        backgroundColor: Colors.green[200],
+        color: Colors.green[200],
+        onRefresh: () => _bloc.fetchData(),
+        child: StreamBuilder<ApiResponse<Main_model>>(
+          stream: _bloc.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              switch (snapshot.data.status) {
+                case Status.LOADING:
+                  return spinKit(context, snapshot.data.message);
+                  break;
+                case Status.COMPLETED:
+                  return mainWidget(context, snapshot.data.data);
+                  break;
+                case Status.ERROR:
+                  return errorWidget(context, snapshot.data.message, _bloc);
+                  break;
               }
-              return Container();
-            },
-          ),
+            }
+            return Container();
+          },
         ),
       ),
     );

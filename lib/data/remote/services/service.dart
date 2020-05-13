@@ -6,7 +6,6 @@ import 'package:covid/models/main_model.dart';
 import 'package:http/http.dart';
 
 class Service {
-
   final String _baseUrl = "https://api.covid19api.com/";
 
   Future<dynamic> getCovidInfo(String url) async {
@@ -33,9 +32,7 @@ class Service {
         throw UnauthorisedException(response.body.toString());
       case 500:
       default:
-        throw FetchDataException(
-            'Error occured while Communication with Server with StatusCode : ${response
-                .statusCode}');
+        throw FetchDataException('An error occurred');
     }
   }
 }

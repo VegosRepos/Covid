@@ -1,3 +1,4 @@
+import 'package:covid/bloc/bloc.dart';
 import 'package:covid/models/country_model.dart';
 import 'package:covid/models/global_model.dart';
 import 'package:covid/models/index.dart';
@@ -11,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 Widget spinKit(BuildContext context, String message) {
   return Center(
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircleAvatar(
           backgroundImage: AssetImage('images/corona.png'),
@@ -19,7 +21,17 @@ Widget spinKit(BuildContext context, String message) {
           child: SpinKitRing(
               color: Colors.deepOrange[300], size: 100, lineWidth: 3),
         ),
-        Text(message),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.aBeeZee(
+              color: Colors.green[800],
+              fontSize: 15,
+            ),
+          ),
+        ),
       ],
     ),
   );
@@ -108,6 +120,32 @@ Widget mainWidget(BuildContext context, Main_model model) {
   );
 }
 
-Widget errorWidget(BuildContext context, String message) {
-  return Text(message);
+Widget errorWidget(BuildContext context, String message, MainBloc bloc) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.aBeeZee(
+              fontSize: 20,
+              color: Colors.red[600],
+            ),
+          ),
+        ),
+        FlatButton(
+          color: Colors.redAccent,
+          child: Text('Retry',
+              style: GoogleFonts.aBeeZee(fontSize: 25, color: Colors.green[200])),
+          onPressed: () {
+            bloc.fetchData();
+          },
+        )
+      ],
+    ),
+  );
 }
