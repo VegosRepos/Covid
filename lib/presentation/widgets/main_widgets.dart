@@ -37,15 +37,12 @@ Widget spinKit(BuildContext context, String message) {
   );
 }
 
-Widget error(BuildContext context) {
-  return Container();
-}
-
 Widget cardView(BuildContext context, Country_model country, int index) {
   return Card(
     color: Colors.deepOrange[300],
     child: ListTile(
       onTap: () {
+        FocusScope.of(context).unfocus();
         Navigator.of(context).push(routeToDescription(country));
       },
       title: Text(
@@ -63,6 +60,7 @@ Widget sliverAppBar(BuildContext context, Global_model global) {
     expandedHeight: 300,
     backgroundColor: Colors.green[200],
     flexibleSpace: FlexibleSpaceBar(
+      collapseMode: CollapseMode.pin,
       background: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,11 +116,27 @@ Widget sliverList(
 
 Widget searchField(BuildContext context, TextEditingController controller) {
   return SliverAppBar(
-    backgroundColor: Colors.transparent,
-    expandedHeight: 100,
+    backgroundColor: Colors.grey[200],
     title: TextField(
       decoration: InputDecoration(
-          labelText: "Search something", fillColor: Colors.transparent),
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        hintText: 'Country',
+        suffixIcon: FlatButton(
+            shape: CircleBorder(),
+            child: Icon(
+              Icons.clear,
+              color: Colors.red[300],
+            ),
+            onPressed: () {
+              controller.clear();
+            }),
+        prefixIcon: const Icon(
+          Icons.search,
+          color: Colors.green,
+        ),
+        prefixText: ' ',
+      ),
       controller: controller,
     ),
   );
