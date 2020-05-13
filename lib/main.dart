@@ -25,10 +25,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   MainBloc _bloc;
+  TextEditingController controller = new TextEditingController();
+  String filter;
 
   @override
   void initState() {
     _bloc = MainBloc();
+    controller.addListener(() {
+      setState(() {
+        filter = controller.text;
+      });
+    });
     super.initState();
   }
 
@@ -49,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                   return spinKit(context, snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return mainWidget(context, snapshot.data.data);
+                  return mainWidget(context, snapshot.data.data, controller, filter);
                   break;
                 case Status.ERROR:
                   return errorWidget(context, snapshot.data.message, _bloc);
@@ -66,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _bloc.dispose();
+    controller.dispose();
     super.dispose();
   }
 }

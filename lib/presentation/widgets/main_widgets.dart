@@ -100,21 +100,43 @@ Widget sliverAppBar(BuildContext context, Global_model global) {
   );
 }
 
-Widget sliverList(BuildContext context, List<Country_model> countries) {
+Widget sliverList(
+    BuildContext context, List<Country_model> countries, String filter) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
-      return cardView(context, countries[index], index + 1);
+      return filter == null || filter == ""
+          ? cardView(context, countries[index], index + 1)
+          : countries[index]
+                  .Country
+                  .toLowerCase()
+                  .contains(filter.toLowerCase())
+              ? cardView(context, countries[index], index + 1)
+              : Container();
     }, childCount: countries.length),
   );
 }
 
-Widget mainWidget(BuildContext context, Main_model model) {
+Widget searchField(BuildContext context, TextEditingController controller) {
+  return SliverAppBar(
+    backgroundColor: Colors.transparent,
+    expandedHeight: 100,
+    title: TextField(
+      decoration: InputDecoration(
+          labelText: "Search something", fillColor: Colors.transparent),
+      controller: controller,
+    ),
+  );
+}
+
+Widget mainWidget(BuildContext context, Main_model model,
+    TextEditingController controller, String filter) {
   return SizedBox(
     height: MediaQuery.of(context).size.height - 24,
     child: CustomScrollView(
       slivers: <Widget>[
         sliverAppBar(context, model.Global),
-        sliverList(context, sortCountriesByConfirmed(model))
+        searchField(context, controller),
+        sliverList(context, sortCountriesByConfirmed(model), filter)
       ],
     ),
   );
@@ -140,7 +162,8 @@ Widget errorWidget(BuildContext context, String message, MainBloc bloc) {
         FlatButton(
           color: Colors.redAccent,
           child: Text('Retry',
-              style: GoogleFonts.aBeeZee(fontSize: 25, color: Colors.green[200])),
+              style:
+                  GoogleFonts.aBeeZee(fontSize: 25, color: Colors.green[200])),
           onPressed: () {
             bloc.fetchData();
           },
