@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:covid/data/remote/exceptions/app_exceptions.dart';
+import 'package:covid/data/remote/exceptions/appExceptions.dart';
 import 'package:covid/models/main_model.dart';
 import 'package:http/http.dart';
 

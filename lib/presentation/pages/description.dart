@@ -36,7 +36,7 @@ class _DescriptionState extends State<Description> {
             backgroundColor: Colors.deepOrange[300],
             centerTitle: true,
           ),
-          body: countryDescription(context, country),
+          body: CountryDescription(country),
         ),
       ),
     );

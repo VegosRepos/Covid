@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:covid/data/remote/exceptions/app_exceptions.dart';
+import 'package:covid/data/remote/exceptions/appExceptions.dart';
 import 'package:covid/data/remote/services/baseService.dart';
 import 'package:http/http.dart';
 

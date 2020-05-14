@@ -78,16 +78,16 @@ class _HomePageState extends State<HomePage> {
       child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           if (state is Loading) {
-            return spinKit(context, 'Loading');
+            return SpinKit('Loading');
           } else if (state is Completed) {
             cachedModel = state.mainInfo;
-            return mainWidget(context, state.mainInfo, controller, filter);
+            return MainWidget(state.mainInfo, controller, filter);
           } else if (state is Error) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _showSnackBar(context, 'Error');
             });
             if (cachedModel != null) {
-              return mainWidget(context, cachedModel, controller, filter);
+              return MainWidget(cachedModel, controller, filter);
             } else
               return Container();
           }
