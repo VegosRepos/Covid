@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController controller = new TextEditingController();
   String filter;
   Main_model cachedModel;
+  MainBloc _bloc;
 
   _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       content: Text(message),
       action: SnackBarAction(
         label: 'Retry',
-        onPressed: () => {},
+        onPressed: () async => _bloc.add(MainEvents.getMainInfo),
       ),
     );
     Scaffold.of(context).showSnackBar(snackBar);
@@ -65,15 +66,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void didChangeDependencies() {
-    final bloc = BlocProvider.of<MainBloc>(context);
-    bloc.add(MainEvents.getMainInfo);
+    _bloc = BlocProvider.of<MainBloc>(context);
+    _bloc.add(MainEvents.getMainInfo);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => null,
+      onRefresh: () async => _bloc.add(MainEvents.getMainInfo),
       child: BlocBuilder<MainBloc, MainState>(
         builder: (context, state) {
           if (state is Loading) {
@@ -98,6 +99,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _bloc.close();
     controller.dispose();
     super.dispose();
   }
