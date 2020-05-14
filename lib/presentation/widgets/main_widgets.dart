@@ -57,6 +57,7 @@ Widget cardView(BuildContext context, Country_model country, int index) {
 
 Widget sliverAppBar(BuildContext context, Global_model global) {
   return SliverAppBar(
+    floating: false,
     expandedHeight: 300,
     backgroundColor: Colors.green[200],
     flexibleSpace: FlexibleSpaceBar(
@@ -71,7 +72,7 @@ Widget sliverAppBar(BuildContext context, Global_model global) {
                   style: TextStyle(fontSize: 12, color: Colors.grey[200])),
               Text(global.TotalConfirmed.toString(),
                   style: GoogleFonts.aBeeZee(
-                      fontSize: 25, color: Colors.yellow[300]))
+                      fontSize: 25, color: Colors.yellow[200]))
             ],
           ),
           Column(
@@ -116,12 +117,16 @@ Widget sliverList(
 
 Widget searchField(BuildContext context, TextEditingController controller) {
   return SliverAppBar(
+    pinned: true,
+    floating: true,
     backgroundColor: Colors.grey[200],
     title: TextField(
+      style: GoogleFonts.aBeeZee(color: Colors.green[800], fontSize: 16),
       decoration: InputDecoration(
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
         hintText: 'Country',
+        hintStyle: GoogleFonts.aBeeZee(color: Colors.grey[400]),
         suffixIcon: FlatButton(
             shape: CircleBorder(),
             child: Icon(
@@ -151,37 +156,6 @@ Widget mainWidget(BuildContext context, Main_model model,
         sliverAppBar(context, model.Global),
         searchField(context, controller),
         sliverList(context, sortCountriesByConfirmed(model), filter)
-      ],
-    ),
-  );
-}
-
-Widget errorWidget(BuildContext context, String message, MainBloc bloc) {
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(4),
-          child: Text(
-            message,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.aBeeZee(
-              fontSize: 20,
-              color: Colors.red[600],
-            ),
-          ),
-        ),
-        FlatButton(
-          color: Colors.redAccent,
-          child: Text('Retry',
-              style:
-                  GoogleFonts.aBeeZee(fontSize: 25, color: Colors.green[200])),
-          onPressed: () {
-            bloc.fetchData();
-          },
-        )
       ],
     ),
   );

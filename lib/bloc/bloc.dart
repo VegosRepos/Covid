@@ -6,6 +6,8 @@ import 'package:covid/models/main_model.dart';
 import 'package:covid/repository/repository.dart';
 
 class MainBloc {
+  bool isInitialLoading = true;
+
   StreamController _streamController;
 
   StreamSink<ApiResponse<Main_model>> get sink => _streamController.sink;
@@ -18,7 +20,10 @@ class MainBloc {
   }
 
   fetchData() async {
-    sink.add(ApiResponse.loading("Wait for last covid information"));
+    if(isInitialLoading) {
+      sink.add(ApiResponse.loading("Wait for last covid information"));
+      isInitialLoading = false;
+    }
     try {
       Main_model model = await locator<Repository>().getCovidInfo();
       sink.add(ApiResponse.completed(model));

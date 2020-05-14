@@ -27,6 +27,19 @@ class _HomePageState extends State<HomePage> {
   MainBloc _bloc;
   TextEditingController controller = new TextEditingController();
   String filter;
+  Main_model cachedModel;
+
+  _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      duration: Duration(seconds: 60),
+      content: Text(message),
+      action: SnackBarAction(
+        label: 'Retry',
+        onPressed: () => _bloc.fetchData(),
+      ),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
 
   @override
   void initState() {
@@ -44,8 +57,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.green[200],
       body: RefreshIndicator(
-        backgroundColor: Colors.green[200],
-        color: Colors.green[200],
         onRefresh: () => _bloc.fetchData(),
         child: StreamBuilder<ApiResponse<Main_model>>(
           stream: _bloc.stream,
@@ -56,10 +67,18 @@ class _HomePageState extends State<HomePage> {
                   return spinKit(context, snapshot.data.message);
                   break;
                 case Status.COMPLETED:
-                  return mainWidget(context, snapshot.data.data, controller, filter);
+                  cachedModel = snapshot.data.data;
+                  return mainWidget(
+                      context, snapshot.data.data, controller, filter);
                   break;
                 case Status.ERROR:
-                  return errorWidget(context, snapshot.data.message, _bloc);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _showSnackBar(context, snapshot.data.message);
+                  });
+                  if (cachedModel != null) {
+                    return mainWidget(context, cachedModel, controller, filter);
+                  } else
+                    return Container();
                   break;
               }
             }
