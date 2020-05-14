@@ -7,7 +7,7 @@ class Repository {
 
   Service _service = locator<Service>();
 
-  Future<Main_model> getCovidInfo() async {
-    return await _service.getCovidInfo(_apiKey);
+  Future<Main_model> getMainInfo() async {
+    return await _service.getMainInfo(_apiKey);
   }
 }

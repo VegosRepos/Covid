@@ -1,4 +1,4 @@
-import 'package:covid/bloc/bloc.dart';
+import 'package:covid/bloc/mainBloc.dart';
 import 'package:covid/models/country_model.dart';
 import 'package:covid/models/global_model.dart';
 import 'package:covid/models/index.dart';
@@ -147,15 +147,15 @@ Widget searchField(BuildContext context, TextEditingController controller) {
   );
 }
 
-Widget mainWidget(BuildContext context, Main_model model,
+Widget mainWidget(BuildContext context, Main_model mainInfo,
     TextEditingController controller, String filter) {
   return SizedBox(
     height: MediaQuery.of(context).size.height - 24,
     child: CustomScrollView(
       slivers: <Widget>[
-        sliverAppBar(context, model.Global),
+        sliverAppBar(context, mainInfo.Global),
         searchField(context, controller),
-        sliverList(context, sortCountriesByConfirmed(model), filter)
+        sliverList(context, sortCountriesByConfirmed(mainInfo), filter)
       ],
     ),
   );
