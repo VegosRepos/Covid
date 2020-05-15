@@ -1,12 +1,13 @@
 import 'package:covid/bloc/events/mainEvents.dart';
 import 'package:covid/bloc/mainBloc.dart';
 import 'package:covid/locator.dart';
+import 'package:covid/presentation/snackbars/errorSnack.dart';
 import 'package:covid/presentation/widgets/main_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/providers/mainInfoProvider.dart';
 import 'bloc/states/mainStates.dart';
-import 'models/main_model.dart';
 
 void main() {
   setupLocator();
@@ -37,28 +38,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController controller = new TextEditingController();
-  String filter;
-  Main_model cachedModel;
+  TextEditingController _controller = new TextEditingController();
+  String _filter;
   MainBloc _bloc;
-
-  _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      duration: Duration(seconds: 60),
-      content: Text(message),
-      action: SnackBarAction(
-        label: 'Retry',
-        onPressed: () async => _bloc.add(MainEvents.getMainInfo),
-      ),
-    );
-    Scaffold.of(context).showSnackBar(snackBar);
-  }
 
   @override
   void initState() {
-    controller.addListener(() {
+    _controller.addListener(() {
       setState(() {
-        filter = controller.text;
+        _filter = _controller.text;
       });
     });
     super.initState();
@@ -73,26 +61,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => _bloc.add(MainEvents.getMainInfo),
-      child: BlocBuilder<MainBloc, MainState>(
-        builder: (context, state) {
-          if (state is Loading) {
-            return SpinKit('Loading');
-          } else if (state is Completed) {
-            cachedModel = state.mainInfo;
-            return MainWidget(state.mainInfo, controller, filter);
-          } else if (state is Error) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _showSnackBar(context, 'Error');
-            });
-            if (cachedModel != null) {
-              return MainWidget(cachedModel, controller, filter);
-            } else
-              return Container();
-          }
-          return Container();
-        },
+    return MainInfoProvider(
+      mainInfo: _bloc.mainInfo,
+      filter: _filter,
+      controller: _controller,
+      child: RefreshIndicator(
+        onRefresh: () async => _bloc.add(MainEvents.getMainInfo),
+        child: BlocBuilder<MainBloc, MainState>(
+          builder: (context, state) {
+            if (state is Loading) {
+              return SpinKit('Loading');
+            } else if (state is Completed) {
+              return MainWidget(state.mainInfo, _controller);
+            } else if (state is Error) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showErrorSnackBar(context, _bloc, 'An error occurred');
+              });
+              if (_bloc.mainInfo != null) {
+                return MainWidget(_bloc.mainInfo, _controller);
+              } else
+                return Container();
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }
@@ -100,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _bloc.close();
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }

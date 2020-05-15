@@ -1,5 +1,5 @@
+import 'package:covid/bloc/providers/mainInfoProvider.dart';
 import 'package:covid/models/country_model.dart';
-import 'package:covid/models/global_model.dart';
 import 'package:covid/models/index.dart';
 import 'package:covid/presentation/animations/page_animation.dart';
 import 'package:covid/presentation/utils/utils.dart';
@@ -90,7 +90,7 @@ class Sliver extends StatelessWidget {
               children: <Widget>[
                 Text('Confirmed',
                     style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-                Text(global.TotalConfirmed.toString(),
+                Text(global.TotalConfirmed.toString() ?? '',
                     style: GoogleFonts.aBeeZee(
                         fontSize: 25, color: Colors.yellow[200]))
               ],
@@ -99,7 +99,7 @@ class Sliver extends StatelessWidget {
               children: <Widget>[
                 Text('Deaths',
                     style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-                Text(global.TotalDeaths.toString(),
+                Text(global.TotalDeaths.toString() ?? '',
                     style: GoogleFonts.aBeeZee(
                         fontSize: 25, color: Colors.red[400]))
               ],
@@ -108,7 +108,7 @@ class Sliver extends StatelessWidget {
               children: <Widget>[
                 Text('Recovered',
                     style: TextStyle(fontSize: 12, color: Colors.grey[200])),
-                Text(global.TotalRecovered.toString(),
+                Text(global.TotalRecovered.toString() ?? '',
                     style: GoogleFonts.aBeeZee(
                         fontSize: 25, color: Colors.green[800]))
               ],
@@ -122,12 +122,12 @@ class Sliver extends StatelessWidget {
 
 class Slivers extends StatelessWidget {
   final List<Country_model> countries;
-  final String filter;
 
-  Slivers(this.countries, this.filter);
+  Slivers(this.countries);
 
   @override
   Widget build(BuildContext context) {
+    String filter = MainInfoProvider.of(context).filter;
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         return filter == null || filter == ""
@@ -144,7 +144,7 @@ class Slivers extends StatelessWidget {
 }
 
 class SearchField extends StatelessWidget {
-  final TextEditingController controller;
+  TextEditingController controller;
 
   SearchField(this.controller);
 
@@ -184,10 +184,9 @@ class SearchField extends StatelessWidget {
 
 class MainWidget extends StatelessWidget {
   final Main_model mainInfo;
-  final TextEditingController controller;
-  final String filter;
+  TextEditingController controller;
 
-  MainWidget(this.mainInfo, this.controller, this.filter);
+  MainWidget(this.mainInfo, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +196,7 @@ class MainWidget extends StatelessWidget {
         slivers: <Widget>[
           Sliver(mainInfo.Global),
           SearchField(controller),
-          Slivers(sortCountriesByConfirmed(mainInfo), filter)
+          Slivers(sortCountriesByConfirmed(mainInfo))
         ],
       ),
     );

@@ -11,4 +11,8 @@ class Completed extends MainState {
   Completed(this.mainInfo);
 }
 
-class Error extends MainState {}
+class Error extends MainState {
+  final Main_model mainInfo;
+
+  Error(this.mainInfo);
+}
